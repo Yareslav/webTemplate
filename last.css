@@ -1740,6 +1740,7 @@ body > div {
       grid-template-columns: repeat(2, 1fr);
   grid-column-gap: 30px;
   grid-row-gap: 48px;
+  padding-bottom: 69px;
 }
 
 .home__table1, .home__table2 {
@@ -1749,31 +1750,86 @@ body > div {
       grid-template-rows: repeat(5, 1fr);
 }
 
-.home__table1 {
-  -ms-grid-columns: minmax(70px, 8.5%) 17% 51% 23%;
-      grid-template-columns: minmax(70px, 8.5%) 17% 51% 23%;
-  grid-column: span 2;
-}
-
-.home__typical {
-  font-size: 14px;
-  color: #777777;
+.home__table1 div, .home__table2 div {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
   position: relative;
+  border: 1px solid #dddddd;
+}
+
+.home__table1 {
+  -ms-grid-columns: minmax(90px, 8.5%) minmax(150px, 17%) 51% 23%;
+      grid-template-columns: minmax(90px, 8.5%) minmax(150px, 17%) 51% 23%;
+  grid-column: span 2;
+}
+
+.home__table2 {
+  -ms-grid-columns: minmax(90px, 17.5%) minmax(150px, 35%) 47%;
+      grid-template-columns: minmax(90px, 17.5%) minmax(150px, 35%) 47%;
+}
+
+@media (max-width: 480px) {
+  .home__table2 {
+    -ms-grid-columns: 90px 150px calc(100% - 240px);
+        grid-template-columns: 90px 150px calc(100% - 240px);
+  }
+}
+
+.home__col {
+  padding-left: 16px;
+}
+
+.home__typival {
+  padding-left: 16px;
+  font-size: 14px;
+  color: #777777;
   height: 35px;
   background: #f8f8f8;
 }
 
-.home .white {
-  color: white;
+.home__typival p {
+  border: 1px solid red;
+  max-height: 20px;
+  overflow: auto;
+  padding-right: 5px;
+}
+
+.home__col1 {
+  border-top-left-radius: 10px;
+}
+
+.home__col2 {
+  border-top-right-radius: 10px;
+}
+
+.home__col3 {
+  border-bottom-left-radius: 10px;
+}
+
+.home__col4 {
+  border-bottom-right-radius: 10px;
+}
+
+@media (max-width: 980px) {
+  .home__tables {
+    -ms-grid-columns: 1fr;
+        grid-template-columns: 1fr;
+  }
+  .home__table1 {
+    grid-column: span 1;
+  }
+}
+
+.white-color {
+  color: white !important;
+}
+
+.gray {
+  background-color: #ececec;
 }
 
 .contacts__map {
