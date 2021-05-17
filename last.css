@@ -482,10 +482,6 @@ body {
   background-color: #f3f3f3;
 }
 
-body > div {
-  display: none;
-}
-
 .default {
   cursor: url(./images/hand.png), default;
   padding: 10px 15px;
@@ -617,7 +613,6 @@ body > div {
 }
 
 .footer {
-  display: none;
   color: white;
 }
 
@@ -957,6 +952,8 @@ body > div {
   position: relative;
   left: 2.4%;
   width: 71%;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .home__poss p:first-child {
@@ -979,9 +976,28 @@ body > div {
   overflow: auto;
 }
 
-@media (max-width: 490px) {
+@media (max-width: 600px) {
   .home__poss {
     width: calc(100% - 150px);
+  }
+}
+
+@media (max-width: 360px) {
+  .home__title {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: start;
+        -ms-flex-align: start;
+            align-items: flex-start;
+  }
+  .home__title .home__view {
+    margin-bottom: 20px;
+    left: 2.4%;
+  }
+  .home__poss {
+    width: 100%;
   }
 }
 
@@ -3604,7 +3620,7 @@ body > div {
 }
 
 .servic__grido {
-  padding-bottom: 50px;
+  padding-bottom: 100px;
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: (minmax(220px, 1fr))[auto-fit];
