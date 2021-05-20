@@ -97,6 +97,23 @@ class Time {
     butt_.attr(`stopped`, !stop_);
   }
 }
+var colors = {
+  green: {
+    main: `#70c570`,
+    postMain: ` #e36b2c`,
+    rarely: `#6cb16c`,
+  },
+  darkGreen: {
+    main: `#76c7c0`,
+    postMain: `#e8645a`,
+    rarely: `#62a29e`,
+  },
+  purple: {
+    main: `#a65980`,
+    postMain: `#26b9e1`,
+    rarely: `#9d557a`,
+  },
+}
 class Slider {
   constructor(el) {
     this.slider = el;
@@ -115,6 +132,7 @@ class Slider {
     }
     el.find(`[container]`).empty();
     el.find(`[container]`).append($(this.mass[1]).attr(`index`, 1));
+    el.find(`[index="${this.count}"]`).attr(`postMain`,``);
   }
   count = 1;
   timer = true;
@@ -156,12 +174,11 @@ class Slider {
       .children()
       .removeAttr(`style`)
       .removeAttr(`postMain`);
+    this.slider.find(`[index]`).removeAttr(`postMain`)
     this.slider
       .find(`[index="${this.count}"]`)
-      .css({
-        background: colors[$(`.home__slider`).attr(`color-all`)].postMain,
-      })
       .removeClass(`tran`)
+      .attr(`postMain`,``)
       .addClass(`tran`);
     function fast_(go) {
       if (go) {
@@ -172,18 +189,37 @@ class Slider {
         set.left = `-100%`;
       }
     }
-    if (!this.slider.attr(`color-all`)) return;
+    if (this.slider.attr(`color-all`)) {
     var ind_ = this.slider.find(`[index]`).attr(`index`),
       color_;
     if (ind_ == 0) color_ = `green`;
     else if (ind_ == 1) color_ = `darkGreen`;
     else color_ = `purple`;
     this.slider.attr(`color-all`, color_);
-    var keys = [`main`, `postMain`, `rarely`].forEach(function (elem) {
-      $(`[${elem}]`)
-        .css({ background: colors[color_][elem] })
-        .removeClass(`tran`)
-        .addClass(`tran`);
-    });
+    }
+    changeColorGlobal();
   }
+}
+function changeColorGlobal(stop=false) {
+  setTimeout(()=>{
+    const mainColor=$(`.home__slider`).attr(`color-all`);
+    var mass=[`postMain`,`main`,`rarely`].forEach(function (elem) {
+      $(`[`+elem+`]`).each(function () {
+        if ($(this).attr(`type`)==`text`) {
+          $(this).css({color:colors[mainColor][elem]})
+        } else {
+          $(this).css({background:colors[mainColor][elem]})
+        }
+      })
+    })
+    if (stop) return;
+    $(`[imgColor]`).each(function (elem) {
+      var num=$(this).attr(`src`).split(``)[13] , faze="";
+      num= (+num) ? num : ``;
+      if (mainColor==`darkGreen`) faze=`-faze2`
+      else if (mainColor==`purple`) faze=`-faze3`
+      $(this).attr(`src`,`./images/duga`+num+faze+`.png`)
+    })
+    $(`body`).addClass(mainColor);
+  },100);
 }

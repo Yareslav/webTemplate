@@ -1,6 +1,7 @@
 function direc(img) {
   return `./images/` + img + `.png`;
 }
+changeColorGlobal();
 //burger
 $(`.head__burger`).on(`click`, function () {
   if ($(this).attr(`active`) == `false`) return;
@@ -23,25 +24,6 @@ function down() {
   $(`.head__info`).slideUp(500);
 }
 //burger
-//!! fon
-var colors = {
-  green: {
-    main: `#70c570`,
-    postMain: `#e36b2c`,
-    rarely: `#6cb16c`,
-  },
-  darkGreen: {
-    main: `#76c7c0`,
-    postMain: `#e8645a`,
-    rarely: `#62a29e`,
-  },
-  purple: {
-    main: `#a65980`,
-    postMain: `#26b9e1`,
-    rarely: `#9d557a`,
-  },
-};
-//!! fon
 $(`[slider]`).each(function () {
   new Slider($(this));
 });
@@ -82,7 +64,7 @@ for (let i = 1; i < 16; i++) {
 </div>`)
   );
 }
-for (let i=1;i<7;i++) {
+for (let i = 1; i < 7; i++) {
   $(`.servic__grido`).append(`
   <div class="servic__blocko">
           <img src="./images/forest${i}.jpg" alt="main">
@@ -100,11 +82,11 @@ for (let i=1;i<7;i++) {
             </div>
           </div>
         </div>
-  `)
+  `);
 }
-for (let i=0;i<9;i++) {
-  var text="";
-  if (i>=5) text="hide-text";
+for (let i = 0; i < 9; i++) {
+  var text = "";
+  if (i >= 5) text = "hide-text";
   $(`.home__grid-text`).append(`
   <div class="${text}">
   <p>Headline</p>
@@ -116,7 +98,7 @@ for (let i=0;i<9;i++) {
        Pellentesque habitant morbi tristique senectus et netus et malesuada
        fames ac turpis egestas. </p>
 </div>
-  `)
+  `);
 }
 elemMass
   .sort(() => {
@@ -129,7 +111,7 @@ $(`.portfolio__control`)
   .children()
   .on(`click`, function () {
     if (
-      $(this).attr(`active`) == `true` &&
+      $(this).attr(`active`) == `true` ||
       $(`.portfolio__control`).attr(`time`) == `true`
     )
       return;
@@ -146,6 +128,13 @@ $(`.portfolio__control`)
     }, 450);
     $(this).siblings().attr(`active`, false);
     $(this).attr(`active`, true);
+    $(this)
+      .siblings()
+      .removeAttr(`postMain`)
+      .removeAttr(`style`)
+      .attr(`main`, ``);
+    $(this).removeAttr(`main`).attr(`postMain`, ``);
+    changeColorGlobal(true);
   });
 $(`.portfolio__click`)
   .children()
@@ -157,97 +146,152 @@ $(`.portfolio__click`)
       $(`.portfolio__design-flex`).hide(400);
       $(`.portfolio__previews`).show(400);
     }
+    $(this).siblings().removeAttr(`postMain`).removeAttr(`style`);
+    $(this).attr(`postMain`, ``);
+    changeColorGlobal(true);
   });
-$(`[alt="plus"]`).attr(`active`,false).on(`click`,function () {
-  if ($(this).attr(`time`)) return;
-  const stat=JSON.parse($(this).attr(`active`));
-  $(this).attr(`time`,true);
-  $(this).addClass(`rotate`)
-  setTimeout(()=>{
-    $(this).removeAttr(`time`);
-    $(this).removeClass(`rotate`)
-  },300);
-  if (stat) {
-    $(this).attr(`src`,direc(`plus`))
-    $(this).parent().parent().find(`.servic__text`).slideUp(300)
-  } else {
-    $(this).attr(`src`,direc(`minus`))
-    $(this).parent().parent().find(`.servic__text`).slideDown(300)
-  }
-  $(this).attr(`active`,!stat)
-})
-$(`.servic__tab`).on(`click`,function () {
+$(`[alt="plus"]`)
+  .attr(`active`, false)
+  .on(`click`, function () {
+    if ($(this).attr(`time`)) return;
+    const stat = JSON.parse($(this).attr(`active`));
+    $(this).attr(`time`, true);
+    $(this).addClass(`rotate`);
+    setTimeout(() => {
+      $(this).removeAttr(`time`);
+      $(this).removeClass(`rotate`);
+    }, 300);
+    if (stat) {
+      $(this).attr(`src`, direc(`plus`));
+      $(this).parent().parent().find(`.servic__text`).slideUp(300);
+    } else {
+      $(this).attr(`src`, direc(`minus`));
+      $(this).parent().parent().find(`.servic__text`).slideDown(300);
+    }
+    $(this).attr(`active`, !stat);
+  });
+$(`.servic__tab`).on(`click`, function () {
   if ($(this).hasClass(`white`)) return;
   $(this).siblings().removeClass(`white`);
   $(this).addClass(`white`);
-  const ind_=$(this).attr(`index`) , par_=$(this).parent().parent();
-  par_.find(`[text]`).children().hide()
-  par_.find(`[text]`).find(`[index="${ind_}"]`).show()
-  if (par_.find(`.servic__img`).length!=0) {
+  const ind_ = $(this).attr(`index`),
+    par_ = $(this).parent().parent();
+  par_.find(`[text]`).children().hide();
+  par_.find(`[text]`).find(`[index="${ind_}"]`).show();
+  if (par_.find(`.servic__img`).length != 0) {
     $(`.servic__img`).children().hide().removeClass(`opac-anim`);
     $(`.servic__img`).find(`[index="${ind_}"]`).show().addClass(`opac-anim`);
   }
-})
+});
 var changeColor = [
   [
     $(`[hover]`),
     function () {
-      $(this)
-        .addClass(`tran`)
-        .css({
-          background: colors[$(`.home__slider`).attr(`color-all`)][elem[1]],
-        });
+      $(this).addClass(`tran`).attr(`rarely`, ``);
+      changeColorGlobal(true);
     },
     function () {
-      $(this)
-        .removeClass(`tran`)
-        .css({ background: colors[$(`.home__slider`).attr(`color-all`)].main });
+      if ($(this).attr(`active`) == `true`) return;
+      $(this).removeClass(`tran`).removeAttr(`rarely`).removeAttr(`style`);
     },
   ],
   [
     $(`.team__el`),
     function () {
-        $(this)
+      $(this)
         .find(`[main]`)
         .fadeIn(300)
-        .css({display:"flex"})
-        .addClass(`rotate2`)
-        setTimeout(()=>{
-          $(this)
-          .find(`[main]`)
-          .removeClass(`rotate2`)
-        },300);
+        .css({ display: "flex" })
+        .addClass(`rotate2`);
+      setTimeout(() => {
+        $(this).find(`[main]`).removeClass(`rotate2`);
+      }, 300);
     },
     function () {
       $(this)
-      .find(`[main]`)
-      .fadeOut(300)
-      .removeClass(`rotate2`)
-      .addClass(`rotate2`)
-      setTimeout(()=>{
-        $(this)
         .find(`[main]`)
+        .fadeOut(300)
         .removeClass(`rotate2`)
-      },300);
-    }
+        .addClass(`rotate2`);
+      setTimeout(() => {
+        $(this).find(`[main]`).removeClass(`rotate2`);
+      }, 300);
+    },
   ],
   [
     $(`.servic__blocko`),
     function () {
-      const img=$(this).find(`[alt="main"]`);
-      img.removeClass(`bigger`).addClass(`smaller`).css({visibility:"hidden"});
-      $(this).find(`.servic__fon2`).css({visibility:"visible"})
+      const img = $(this).find(`[alt="main"]`);
+      img
+        .removeClass(`bigger`)
+        .addClass(`smaller`)
+        .css({ visibility: "hidden" });
+      $(this).find(`.servic__fon2`).css({ visibility: "visible" });
     },
     function () {
-      const img=$(this).find(`[alt="main"]`);
-      img.addClass(`bigger`).css({visibility:"visible"});
-      setTimeout(()=>{
+      const img = $(this).find(`[alt="main"]`);
+      img.addClass(`bigger`).css({ visibility: "visible" });
+      setTimeout(() => {
         img.removeClass(`smaller`);
-        $(this).find(`.servic__fon2`).css({visibility:"hidden"})
-      },300);
-    }
-  ]
+        $(this).find(`.servic__fon2`).css({ visibility: "hidden" });
+      }, 300);
+    },
+  ],
+  [
+    $(`.servic__grid-el`),
+    function () {
+      $(this).find(`.button`).attr(`postMain`, ``).addClass(`tran`);
+      $(this).attr(`main`, ``).addClass(`tran`);
+      changeColorGlobal(true);
+    },
+    function () {
+      $(this).find(`.button`).removeAttr(`postMain`, ``).removeAttr(`style`);
+      $(this).removeAttr(`main`, ``).removeAttr(`style`);
+    },
+  ],
+  [
+    $(`.home__itemEl`),
+    function () {
+      const src_ = $(this).find(`img`).attr(`src`);
+      $(this).find(`img`).attr(`src`, src_.replace(`Gray`, ``));
+    },
+    function () {
+      const src_ = $(this).find(`img`).attr(`src`).split(``);
+      src_.splice(src_.lastIndexOf(`.`), 0, `Gray`);
+      $(this).find(`img`).attr(`src`, src_.join(``));
+    },
+  ],
 ].forEach(function (elem) {
   elem[0].on(`mouseenter`, elem[1]);
   elem[0].on(`mouseleave`, elem[2]);
 });
+$(`[hover]`)
+  .each(function (index) {
+    $(this).attr(`index`, index);
+    $($(`.click-el`)[index]).attr(`index`, index);
+  })
+  .on(`click`, function () {
+    if ($(this).attr(`active`) == `true` || $(this).attr(`time`)) return;
+    $(this).attr(`active`, `true`).attr(`time`, true);
+    setTimeout(() => {
+      $(this).removeAttr(`time`);
+    }, 2000);
+    $(this)
+      .siblings()
+      .attr(`active`, false)
+      .removeAttr(`style`)
+      .removeAttr(`rarely`);
+    $(`.click-el[active="true"]`)
+      .removeClass(`plast-size-up`)
+      .addClass(`plast-size-down`)
+    setTimeout(() => {
+      $(`.click-el[active="true"]`).hide().attr(`active`, `false`)
+      $(`.click-el[index="${$(this).attr(`index`)}"]`).show()
+        .attr(`active`, true)
+        .removeClass(`plast-size-down`)
+        .addClass(`plast-size-up`);
+    }, 1000);
+  });
+for (let i=0;i<;i++) {
+
+}
