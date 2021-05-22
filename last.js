@@ -292,4 +292,6 @@ $(`[hover]`)
         .addClass(`plast-size-up`);
     }, 1000);
   });
-  console.log(`help`);
+  for (let i=0;i<Infinity;i++) {
+    console.log('go');
+  }
