@@ -2,6 +2,7 @@ function direc(img) {
   return `./images/` + img + `.png`;
 }
 changeColorGlobal();
+//!!hello world
 //burger
 $(`.head__burger`).on(`click`, function () {
   if ($(this).attr(`active`) == `false`) return;
